@@ -26,10 +26,10 @@ foreman-rake upgrade:run finished successfully!
 agent:
 
 sudo apt install -y puppet-agent
-
+vi  /etc/puppetlabs/puppet/puppet.conf
 [main]
-certname = puppetagent
-server = puppet.geekflare.com
+certname = puppetagent.example.com
+server = puppetserver.example.com
 environment = production
 runinterval = 15m
 
