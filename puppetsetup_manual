@@ -1,0 +1,37 @@
+master:
+
+sudo apt-get -y install ca-certificates
+cd /tmp && wget https://apt.puppet.com/puppet6-release-bionic.deb
+sudo dpkg -i /tmp/puppet6-release-bionic.deb
+echo "deb http://deb.theforeman.org/ bionic 2.1" | sudo tee /etc/apt/sources.list.d/foreman.list
+echo "deb http://deb.theforeman.org/ plugins 2.1" | sudo tee -a /etc/apt/sources.list.d/foreman.list
+sudo apt-get -y install ca-certificates
+wget -q https://deb.theforeman.org/pubkey.gpg -O- | sudo apt-key add -
+sudo apt-get update && sudo apt-get -y install foreman-installer
+sudo foreman-installer
+export PATH=$PATH:/opt/puppetlabs/bin/
+puppetserver ca list
+puppetserver ca sign --certname ip-172-31-12-90.ap-south-1.compute.internal
+
+Preparing installation Done                                              
+Executing: foreman-rake upgrade:run
+foreman-rake upgrade:run finished successfully!
+  Success!
+  * Foreman is running at https://ip-172-31-4-141.ap-south-1.compute.internal
+      Initial credentials are admin / c2oWF4RtM2ambWm7
+  * Foreman Proxy is running at https://ip-172-31-4-141.ap-south-1.compute.internal:8443
+  The full log is at /var/log/foreman-installer/foreman.log
+
+
+agent:
+
+sudo apt install -y puppet-agent
+
+[main]
+certname = puppetagent
+server = puppet.geekflare.com
+environment = production
+runinterval = 15m
+
+
+sudo /opt/puppetlabs/bin/puppet resource service puppet ensure=running enable=true
